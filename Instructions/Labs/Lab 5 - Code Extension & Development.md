@@ -753,13 +753,14 @@ public boolean validateWrite()
         DDTTierRange    tierRangeBase = formDS.cursor();
         DDTTierRange    tierRange;
            if(tierRangeBase)
-           {
-            select RecId from tierRange
-            where (tierRange.FromMiles > tierRangeBase.FromMiles &&
-                  tierRange.FromMiles > tierRangeBase.ToMiles) ||
-                  (tierRange.ToMiles < tierRangeBase.FromMiles &&
-                  tierRange.ToMiles < tierRangeBase.ToMiles);
-            ret = ret && tierRange.RecId;
+           {            
+	    select firstonly RecId from tierRange
+	    where (tierRange.FromMiles >= tierRangeBase.FromMiles &&
+		  tierRange.ToMiles <= tierRangeBase.FromMiles) ||
+		  (tierRange.FromMiles >= tierRangeBase.ToMiles &&
+		  tierRange.ToMiles <= tierRangeBase.ToMiles);
+
+	    ret = ret && !tierRange.RecId;
         }        
         return ret;
     }
