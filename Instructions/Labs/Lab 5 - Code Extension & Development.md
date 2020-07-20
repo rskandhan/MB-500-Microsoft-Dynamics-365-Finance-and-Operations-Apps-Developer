@@ -149,7 +149,7 @@ Task 2: Table DDTTierRange \> find Method
 3.  Right click the Methods node and add a find() method as follows:
 
 <code><pre>
- static DDTTierRange find(DDTCustomerTier \_custTier,  boolean \_forUpdate = false)
+ static DDTTierRange find(DDTCustomerTier _custTier,  boolean _forUpdate = false)
    {
     DDTTierRange tierRange;
     if (_custTier)
@@ -160,7 +160,7 @@ Task 2: Table DDTTierRange \> find Method
      }
      select firstonly tierRange
      index hint CustTierIdx
-     where tierRange.CustTier == \_custTier;
+     where tierRange.CustTier == _custTier;
     }
     return tierRange;
    }
@@ -175,17 +175,16 @@ Task 3: Table DDTTierRange \> new Method
 2.  Right click the method and add a new method getTier() as follows
 
 <code><pre>
-public static DDTCustomerTier getTier(int \_miles) 
+public static DDTCustomerTier getTier(int _miles) 
 {
    DDTTierRange tierRange;
    DDTCustomerTier ret;
-   while select tierRange
-   {
-      if(tierRange.FromMiles \<= \_miles && tierRange.ToMiles \>= \_miles)
-      {
-         ret = tierRange.CustTier;
-      }
-   }
+   
+   select firstonly CustTier from tierRange
+     where tierRange.FromMiles <= _miles 
+	&& tierRange.ToMiles   >= _miles;
+   
+   ret = tierRange.CustTier;
    return ret;
 }
 </pre></code>
